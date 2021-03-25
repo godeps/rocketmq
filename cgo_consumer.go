@@ -55,15 +55,13 @@ func (mq *CRocketMQConsumer) Init(md *Metadata) error {
 		mq.config.Credentials.Channel = defaultRocketMQChannel
 	}
 	var err error
-	if mq.client, err = cmq.NewPushConsumer(mq.config); err != nil {
-		return err
-	}
-	return mq.client.Start()
+	mq.client, err = cmq.NewPushConsumer(mq.config);
+	return err
 }
 
 // Start the PullConsumer for consuming message
 func (mq *CRocketMQConsumer) Start() error {
-	return nil
+	return mq.client.Start()
 }
 
 // Shutdown the PullConsumer

@@ -7,17 +7,14 @@ import (
 	mqc "github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"strings"
-	"sync"
 )
 
 /**
  *  https://help.aliyun.com/document_detail/114479.html
  */
 type NativeRocketMQConsumer struct {
-	md         *Metadata
-	client     rocketmq.PushConsumer
-	contextMap sync.Map
-	opts       []mqc.Option
+	md     *Metadata
+	client rocketmq.PushConsumer
 }
 
 func init() {
@@ -55,7 +52,6 @@ func (mq *NativeRocketMQConsumer) Init(md *Metadata) error {
 
 	opts = append(opts, mqc.WithNamespace(md.Namespace))
 
-	mq.opts = opts
 	var err error
 	mq.client, err = rocketmq.NewPushConsumer(opts...)
 	return err
@@ -63,7 +59,7 @@ func (mq *NativeRocketMQConsumer) Init(md *Metadata) error {
 
 // Start the PullConsumer for consuming message
 func (mq *NativeRocketMQConsumer) Start() error {
-	return nil
+	return mq.client.Start()
 }
 
 // Shutdown the PullConsumer
@@ -73,20 +69,7 @@ func (mq *NativeRocketMQConsumer) Shutdown() error {
 
 // Subscribe a topic for consuming
 func (mq *NativeRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSelector, f func(context.Context, ...*primitive.MessageExt) (mqc.ConsumeResult, error)) error {
-	consumer, err := rocketmq.NewPushConsumer(mq.opts...)
-	if err != nil {
-		return err
-	}
-
-	if err := mq.client.Subscribe(topic, selector, f); err != nil {
-		return err
-	}
-
-	if err = consumer.Start(); err != nil {
-		return err
-	}
-	mq.contextMap.Store(topic, consumer)
-	return nil
+	return mq.client.Subscribe(topic, selector, f)
 }
 
 // Unsubscribe a topic
