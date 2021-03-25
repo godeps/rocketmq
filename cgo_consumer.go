@@ -68,13 +68,7 @@ func (mq *CRocketMQConsumer) Start() error {
 
 // Shutdown the PullConsumer
 func (mq *CRocketMQConsumer) Shutdown() error {
-	mq.contextMap.Range(func(key, value interface{}) bool {
-		if err := mq.Unsubscribe(key.(string)); err != nil {
-			log.Println(err)
-		}
-		return true
-	})
-	return nil
+	return mq.client.Shutdown()
 }
 
 // Subscribe a topic for consuming
@@ -103,19 +97,10 @@ func (mq *CRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSelecto
 		return err
 	}
 
-	if err = consumer.Start(); err != nil {
-		return err
-	}
-	mq.contextMap.Store(topic, consumer)
 	return nil
 }
 
 // Unsubscribe a topic
 func (mq *CRocketMQConsumer) Unsubscribe(topic string) error {
-	v, ok := mq.contextMap.LoadAndDelete(topic)
-	if ok {
-		mqConsumer := v.(cmq.PushConsumer)
-		return mqConsumer.Shutdown()
-	}
 	return nil
 }

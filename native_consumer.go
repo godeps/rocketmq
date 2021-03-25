@@ -68,13 +68,7 @@ func (mq *NativeRocketMQConsumer) Start() error {
 
 // Shutdown the PullConsumer
 func (mq *NativeRocketMQConsumer) Shutdown() error {
-	mq.contextMap.Range(func(key, value interface{}) bool {
-		if err := mq.Unsubscribe(key.(string)) ; err != nil {
-			return true
-		}
-		return false
-	})
-	return nil
+	return mq.client.Shutdown()
 }
 
 // Subscribe a topic for consuming
@@ -97,12 +91,7 @@ func (mq *NativeRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSe
 
 // Unsubscribe a topic
 func (mq *NativeRocketMQConsumer) Unsubscribe(topic string) error {
-	v, ok := mq.contextMap.LoadAndDelete(topic)
-	if ok {
-		mqConsumer := v.(rocketmq.PushConsumer)
-		return mqConsumer.Shutdown()
-	}
-	return nil
+	return mq.client.Unsubscribe(topic)
 }
 
 func splitAndTrim(s string) []string {
