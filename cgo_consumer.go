@@ -8,7 +8,7 @@ import (
 	cmq "github.com/apache/rocketmq-client-go/core"
 	mqc "github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"sync"
 )
 
@@ -55,7 +55,7 @@ func (mq *CRocketMQConsumer) Init(md *Metadata) error {
 		mq.config.Credentials.Channel = defaultRocketMQChannel
 	}
 	var err error
-	mq.client, err = cmq.NewPushConsumer(mq.config);
+	mq.client, err = cmq.NewPushConsumer(mq.config)
 	return err
 }
 
@@ -71,12 +71,7 @@ func (mq *CRocketMQConsumer) Shutdown() error {
 
 // Subscribe a topic for consuming
 func (mq *CRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSelector, f func(context.Context, ...*primitive.MessageExt) (mqc.ConsumeResult, error)) error {
-	consumer, err := cmq.NewPushConsumer(mq.config)
-	if err != nil {
-		return err
-	}
-
-	if err := consumer.Subscribe(topic, selector.Expression, func(msgEntry *cmq.MessageExt) cmq.ConsumeStatus {
+	if err := mq.client.Subscribe(topic, selector.Expression, func(msgEntry *cmq.MessageExt) cmq.ConsumeStatus {
 		msg := &primitive.MessageExt{}
 		msg.MsgId = msgEntry.MessageID
 		msg.BornTimestamp = msgEntry.BornTimestamp
@@ -88,7 +83,7 @@ func (mq *CRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSelecto
 			return cmq.ConsumeSuccess
 		}
 		if err != nil {
-			log.Printf("consume message failed. topic:%s MessageID:%s status:%v", topic, msgEntry.MessageID, status)
+			log.Warnf("consume message failed. topic:%s MessageID:%s status:%v", topic, msgEntry.MessageID, status)
 		}
 		return cmq.ReConsumeLater
 	}); err != nil {
