@@ -8,7 +8,7 @@ type Metadata struct {
 	AccessKey string `json:"accessKey,omitempty"`
 
 	// rocketmq Credentials
-	AccessSecret string `json:"accessSecret,omitempty"`
+	SecretKey string `json:"secretKey,omitempty"`
 
 	// rocketmq's endpoint, optional, just for http proto
 	Endpoint string `json:"endpoint,omitempty"`

@@ -7,7 +7,7 @@ import (
 	mqc "github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/gogap/errors"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"strings"
 	"sync"
 	"time"
@@ -31,7 +31,7 @@ func NewMQHttpConsumer(md *Metadata) (*MQHttpConsumer, error) {
 
 func (mq *MQHttpConsumer) Init(md *Metadata) error {
 	mq.md = md
-	mq.client = hmq.NewAliyunMQClientWithTimeout(md.Endpoint, md.AccessKey, md.AccessSecret, "", time.Second*defaultHttpMQClientTimeoutSeconds)
+	mq.client = hmq.NewAliyunMQClientWithTimeout(md.Endpoint, md.AccessKey, md.SecretKey, "", time.Second*defaultHttpMQClientTimeoutSeconds)
 	if md.ConsumerBatchSize < 1 {
 		mq.md.ConsumerBatchSize = defaultConsumerNumOfMessages
 	}

@@ -34,7 +34,7 @@ func (mq *CRocketMQProducer) Init(md *Metadata) error {
 			InstanceName: md.Namespace,
 			Credentials: &cmq.SessionCredentials{
 				AccessKey: md.AccessKey,
-				SecretKey: md.AccessSecret,
+				SecretKey: md.SecretKey,
 				Channel:   defaultRocketMQPublicChannel,
 			},
 		},

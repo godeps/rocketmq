@@ -5,6 +5,7 @@ package rocketmq
 
 import (
 	"context"
+	"errors"
 	cmq "github.com/apache/rocketmq-client-go/core"
 	mqc "github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
@@ -42,7 +43,7 @@ func (mq *CRocketMQConsumer) Init(md *Metadata) error {
 			InstanceName: md.Namespace,
 			Credentials: &cmq.SessionCredentials{
 				AccessKey: md.AccessKey,
-				SecretKey: md.AccessSecret,
+				SecretKey: md.SecretKey,
 				Channel:   defaultRocketMQPublicChannel,
 			},
 		},
@@ -83,7 +84,7 @@ func (mq *CRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSelecto
 			return cmq.ConsumeSuccess
 		}
 		if err != nil {
-			log.Warnf("consume message failed. topic:%s MessageID:%s status:%v", topic, msgEntry.MessageID, status)
+			log.Errorf("consume message failed. topic:%s MessageID:%s status:%v", topic, msgEntry.MessageID, status)
 		}
 		return cmq.ReConsumeLater
 	}); err != nil {
@@ -95,5 +96,5 @@ func (mq *CRocketMQConsumer) Subscribe(topic string, selector mqc.MessageSelecto
 
 // Unsubscribe a topic
 func (mq *CRocketMQConsumer) Unsubscribe(topic string) error {
-	return nil
+	return errors.New("unimplemented method")
 }

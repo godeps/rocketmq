@@ -25,7 +25,7 @@ func NewMQHttpProducer(md *Metadata) (*MQHttpProducer, error) {
 
 func (mq *MQHttpProducer) Init(md *Metadata) error {
 	mq.md = md
-	mq.client = hmq.NewAliyunMQClientWithTimeout(md.Endpoint, md.AccessKey, md.AccessSecret, "", time.Second*defaultHttpMQClientTimeoutSeconds)
+	mq.client = hmq.NewAliyunMQClientWithTimeout(md.Endpoint, md.AccessKey, md.SecretKey, "", time.Second*defaultHttpMQClientTimeoutSeconds)
 	return nil
 }
 

@@ -41,7 +41,7 @@ func (mq *NativeRocketMQProducer) Init(md *Metadata) error {
 	if len(md.AccessKey) > 0 {
 		var credentials = primitive.Credentials{
 			AccessKey: md.AccessKey,
-			SecretKey: md.AccessSecret,
+			SecretKey: md.SecretKey,
 		}
 		opts = append(opts, mqp.WithCredentials(credentials))
 	}
