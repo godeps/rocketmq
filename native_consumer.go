@@ -50,7 +50,7 @@ func (mq *NativeRocketMQConsumer) Init(md *Metadata) error {
 		opts = append(opts, mqc.WithCredentials(credentials))
 	}
 
-	opts = append(opts, mqc.WithNamespace(md.Namespace))
+	opts = append(opts, mqc.WithNamespace(md.InstanceId))
 
 	var err error
 	mq.client, err = rocketmq.NewPushConsumer(opts...)

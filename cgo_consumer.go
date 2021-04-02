@@ -40,7 +40,7 @@ func (mq *CRocketMQConsumer) Init(md *Metadata) error {
 		ClientConfig: cmq.ClientConfig{
 			GroupID:      md.ConsumerGroup,
 			NameServer:   md.NameServer,
-			InstanceName: md.Namespace,
+			InstanceName: md.InstanceId,
 			Credentials: &cmq.SessionCredentials{
 				AccessKey: md.AccessKey,
 				SecretKey: md.SecretKey,

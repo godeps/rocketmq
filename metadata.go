@@ -16,6 +16,9 @@ type Metadata struct {
 	// rocketmq's name server, optional
 	NameServer string `json:"nameServer,omitempty"`
 
+	// rocketmq's namespace, optional
+	InstanceId string `json:"instanceId,omitempty"`
+
 	// consumer group for rocketmq's subscribers, suggested to provide
 	ConsumerGroup string `json:"consumerGroup,omitempty"`
 
@@ -24,9 +27,6 @@ type Metadata struct {
 
 	// consumer group for rocketmq's subscribers, suggested to provide, just for cgo proto
 	ConsumerThreadNums int `json:"consumerThreadNums,string,omitempty"`
-
-	// rocketmq's namespace, optional
-	Namespace string `json:"namespace,omitempty"`
 
 	// rocketmq's name server domain, optional
 	NameServerDomain string `json:"nameServerDomain,omitempty"`

@@ -42,7 +42,7 @@ func (mq *MQHttpProducer) Shutdown() error {
 // Send sync message, support single msg just now
 func (mq *MQHttpProducer) SendSync(ctx context.Context, msgs ...*primitive.Message) (*primitive.SendResult, error) {
 	for _, m := range msgs {
-		mqProducer := mq.client.GetProducer(mq.md.Namespace, m.Topic)
+		mqProducer := mq.client.GetProducer(mq.md.InstanceId, m.Topic)
 		msg := hmq.PublishMessageRequest{
 			MessageBody: string(m.Body),
 			MessageTag:  m.GetTags(),

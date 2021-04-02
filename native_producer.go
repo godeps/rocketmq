@@ -46,7 +46,7 @@ func (mq *NativeRocketMQProducer) Init(md *Metadata) error {
 		opts = append(opts, mqp.WithCredentials(credentials))
 	}
 
-	opts = append(opts, mqp.WithNamespace(md.Namespace))
+	opts = append(opts, mqp.WithNamespace(md.InstanceId))
 	var err error
 	mq.client, err = rocketmq.NewProducer(opts...)
 	if err != nil {

@@ -130,7 +130,7 @@ func (mq *MQHttpConsumer) Shutdown() error {
 
 // Subscribe a topic for consuming
 func (mq *MQHttpConsumer) Subscribe(topic string, selector mqc.MessageSelector, f func(context.Context, ...*primitive.MessageExt) (mqc.ConsumeResult, error)) error {
-	mqConsumer := mq.client.GetConsumer(mq.md.Namespace, topic, mq.md.ConsumerGroup, selector.Expression)
+	mqConsumer := mq.client.GetConsumer(mq.md.InstanceId, topic, mq.md.ConsumerGroup, selector.Expression)
 	quitCh := make(chan int)
 	mq.contextMap.Store(topic, quitCh)
 	go mq.consumeInner(quitCh, topic, mqConsumer, f)
